@@ -1,0 +1,1338 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.9" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.9/virl.xsd">
+    <extensions>
+        <entry key="management_network" type="String">flat</entry>
+    </extensions>
+    <node name="P1" type="SIMPLE" subtype="CSR1000v" location="457,157">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17007</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 21:35:59 UTC Mon Feb 22 2016
+!
+version 15.5
+service config
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+service internal
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname P1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+no ip icmp rate-limit unreachable
+!
+ip multicast-routing distributed
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+
+no ip domain lookup
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+mpls label protocol ldp
+mpls oam
+ echo revision 3
+mpls ldp graceful-restart
+mpls ldp discovery hello interval 15
+mpls ldp discovery hello holdtime 30
+mpls traffic-eng tunnels
+mpls traffic-eng logging tunnel path change
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 9OQXBA0Q981
+!
+spanning-tree extend system-id
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+! 
+! 
+! 
+! 
+! 
+! 
+!
+!
+interface Loopback0
+ ip address 10.11.11.11 255.255.255.255
+ ip pim sparse-mode
+ ip router isis lab
+!
+interface GigabitEthernet1
+ description *Mgmt LAN*
+ ip address 172.21.116.110 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet2
+ description *PE1*
+ ip address 192.168.111.11 255.255.255.0
+ negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet3
+ description *PE2*
+ ip address 192.168.112.11 255.255.255.0
+ ip pim sparse-mode
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet4
+ description *PE3*
+ ip address 192.168.113.11 255.255.255.0
+ ip pim sparse-mode
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet5
+ description *PE4*
+ ip address 192.168.114.11 255.255.255.0
+ ip pim sparse-mode
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet6
+ description *PE5*
+ ip address 192.168.115.11 255.255.255.0
+ ip pim dense-mode
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet7
+ description *PE6*
+ ip address 192.168.116.11 255.255.255.0
+ ip pim sparse-mode
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet8
+ description *P2*
+ ip address 192.168.21.11 255.255.255.0
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+interface GigabitEthernet9
+ description *P2*
+ ip address 192.168.12.11 255.255.255.0
+ ip router isis lab
+ speed 1000
+ no negotiation auto
+ mpls ip
+ mpls traffic-eng tunnels
+ ip rsvp bandwidth
+!
+router ospf 1
+ router-id 10.11.11.11
+ network 10.0.0.0 0.255.255.255 area 0
+ network 192.168.111.0 0.0.0.255 area 0
+ network 192.168.112.0 0.0.0.255 area 0
+ network 192.168.113.0 0.0.0.255 area 0
+ network 192.168.114.0 0.0.0.255 area 0
+ network 192.168.115.0 0.0.0.255 area 0
+ network 192.168.116.0 0.0.0.255 area 0
+ network 192.168.0.0 0.0.255.255 area 0
+ distance 116
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng area 0
+!
+router isis lab
+ net 49.0001.0000.0000.0011.00
+ is-type level-1
+ metric-style wide
+ nsf ietf
+ mpls traffic-eng router-id Loopback0
+ mpls traffic-eng level-1
+!
+router bgp 1
+ bgp router-id 10.11.11.11
+ bgp log-neighbor-changes
+ neighbor 10.1.1.1 remote-as 1
+ neighbor 10.2.2.2 remote-as 1
+ neighbor 10.3.3.3 remote-as 1
+ neighbor 10.4.4.4 remote-as 1
+ neighbor 10.5.5.5 remote-as 1
+ neighbor 10.6.6.6 remote-as 1
+ neighbor 10.12.12.12 remote-as 1
+ neighbor 10.12.12.12 update-source Loopback0
+ !
+ address-family ipv4
+  network 10.11.11.11 mask 255.255.255.255
+  neighbor 10.1.1.1 activate
+  neighbor 10.2.2.2 activate
+  neighbor 10.3.3.3 activate
+  neighbor 10.4.4.4 activate
+  neighbor 10.5.5.5 activate
+  neighbor 10.6.6.6 activate
+  neighbor 10.12.12.12 activate
+ exit-address-family
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+ip pim send-rp-announce Loopback0 scope 3
+ip pim send-rp-discovery Loopback0 scope 3
+!
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet1
+ip route 0.0.0.0 0.0.0.0 172.21.116.1
+!
+!
+mpls ldp router-id Loopback0
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+!
+!
+!
+!
+line con 0
+ session-timeout 1200 
+ exec-timeout 0 0
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ session-timeout 1200 
+ exec-timeout 0 0
+ password lab
+ login
+line vty 5 50
+ session-timeout 1200 
+ exec-timeout 0 0
+ password lab
+ login
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3"/>
+        <interface id="2" name="GigabitEthernet4"/>
+        <interface id="3" name="GigabitEthernet5"/>
+        <interface id="4" name="GigabitEthernet6"/>
+        <interface id="5" name="GigabitEthernet7"/>
+        <interface id="6" name="GigabitEthernet8"/>
+        <interface id="7" name="GigabitEthernet9"/>
+    </node>
+    <node name="P2" type="SIMPLE" subtype="CSR1000v" location="478,396">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17008</entry>
+            <entry key="config" type="String">!
+! Last configuration change at 21:36:00 UTC Mon Feb 22 2016
+!
+version 15.5
+service config
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname host-172-16-1-72
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 9VHEDZFDWWN
+!
+spanning-tree extend system-id
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+! 
+! 
+! 
+! 
+!
+!
+interface GigabitEthernet1
+ ip address dhcp
+ negotiation auto
+!
+interface GigabitEthernet2
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet4
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet5
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet6
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet7
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet8
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet9
+ no ip address
+ shutdown
+ negotiation auto
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet1
+!
+!
+!
+!
+control-plane
+!
+ !
+ !
+ !
+ !
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line vty 0
+ login
+line vty 1
+ login
+ length 0
+line vty 2 4
+ login
+!
+!
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet2"/>
+        <interface id="1" name="GigabitEthernet3"/>
+        <interface id="2" name="GigabitEthernet4"/>
+        <interface id="3" name="GigabitEthernet5"/>
+        <interface id="4" name="GigabitEthernet6"/>
+        <interface id="5" name="GigabitEthernet7"/>
+        <interface id="6" name="GigabitEthernet8"/>
+        <interface id="7" name="GigabitEthernet9"/>
+    </node>
+    <node name="PE1" type="SIMPLE" subtype="IOS XRv" location="173,145">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17001</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:14:22 2016 by cisco
+!
+!  IOS-XR Config generated on 2016-02-17 21:02
+! by autonetkit_0.21.4
+hostname PE1
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+telnet vrf Mgmt-intf ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.12/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.1.1.1 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+ ipv4 address 172.21.116.110 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.111.1 255.255.255.0
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.121.1 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ description GigabitEthernet0/0/0/2
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0001.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE1
+ router-id 10.1.1.1
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.1.1.1
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.2.2.2
+  use neighbor-group internal
+ !
+ neighbor 10.3.3.3
+  use neighbor-group internal
+ !
+ neighbor 10.4.4.4
+  use neighbor-group internal
+ !
+ neighbor 10.5.5.5
+  use neighbor-group internal
+  description PE5
+ !
+ neighbor 10.6.6.6
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+ssh server vrf Mgmt-intf
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <node name="PE2" type="SIMPLE" subtype="IOS XRv" location="188,237">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17002</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:15:37 2016 by cisco
+!
+!  IOS-XR Config generated on 2016-02-17 21:02
+! by autonetkit_0.21.4
+hostname PE2
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+telnet vrf Mgmt-intf ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.22/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.2.2.2 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+ ipv4 address 172.21.116.120 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.112.2 255.255.255.0
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.122.2 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0002.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE2
+ router-id 10.2.2.2
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.2.2.2
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.1.1.1
+  use neighbor-group internal
+ !
+ neighbor 10.3.3.3
+  use neighbor-group internal
+ !
+ neighbor 10.4.4.4
+  use neighbor-group internal
+ !
+ neighbor 10.5.5.5
+  use neighbor-group internal
+  description PE5
+ !
+ neighbor 10.6.6.6
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+ssh server vrf Mgmt-intf
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <node name="PE3" type="SIMPLE" subtype="IOS XRv" location="190,344">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17003</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:16:24 2016 by cisco
+!
+!  IOS-XR Config generated on 2016-02-17 21:02
+! by autonetkit_0.21.4
+hostname PE3
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.32/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.3.3.3 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.113.3 255.255.255.0
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.123.3 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0003.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE2
+ router-id 10.3.3.3
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.3.3.3
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.1.1.1
+  use neighbor-group internal
+ !
+ neighbor 10.2.2.2
+  use neighbor-group internal
+ !
+ neighbor 10.4.4.4
+  use neighbor-group internal
+ !
+ neighbor 10.5.5.5
+  use neighbor-group internal
+  description PE5
+ !
+ neighbor 10.6.6.6
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <node name="PE4" type="SIMPLE" subtype="IOS XRv" location="805,176">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17004</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:38:05 2016 by cisco
+!
+hostname PE4
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.42/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.4.4.4 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+ ipv4 address 172.21.116.40 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.114.4 255.255.255.0
+ shutdown
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.124.4 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0004.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE4
+ router-id 10.4.4.4
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.4.4.4
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.1.1.1
+  use neighbor-group internal
+ !
+ neighbor 10.2.2.2
+  use neighbor-group internal
+ !
+ neighbor 10.3.3.3
+  use neighbor-group internal
+ !
+ neighbor 10.5.5.5
+  use neighbor-group internal
+  description PE5
+ !
+ neighbor 10.6.6.6
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <node name="PE5" type="SIMPLE" subtype="IOS XRv" location="810,257">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17005</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:38:20 2016 by cisco
+!
+hostname PE5
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.52/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.5.5.5 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+ ipv4 address 172.21.116.50 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.115.5 255.255.255.0
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.125.5 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0005.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE5
+ router-id 10.5.5.5
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.5.5.5
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.1.1.1
+  use neighbor-group internal
+ !
+ neighbor 10.2.2.2
+  use neighbor-group internal
+ !
+ neighbor 10.3.3.3
+  use neighbor-group internal
+ !
+ neighbor 10.4.4.4
+  use neighbor-group internal
+  description PE4
+ !
+ neighbor 10.6.6.6
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <node name="PE6" type="SIMPLE" subtype="IOS XRv" location="842,360">
+        <extensions>
+            <entry key="static_serial_port_0" type="Integer">17006</entry>
+            <entry key="config" type="String">!! IOS XR Configuration 5.3.2
+!! Last configuration change at Mon Feb 22 05:38:47 2016 by cisco
+!
+hostname PE6
+service timestamps log datetime msec
+service timestamps debug datetime msec
+telnet vrf default ipv4 server max-servers 10
+domain name virl.info
+domain lookup disable
+line template vty
+ timestamp
+ exec-timeout 720 0
+!
+line console
+ exec-timeout 0 0
+!
+line default
+ exec-timeout 720 0
+!
+vty-pool default 0 50
+control-plane
+ management-plane
+  inband
+   interface all
+    allow all
+   !
+  !
+ !
+!
+ipv4 virtual address 172.21.116.62/24
+interface Loopback0
+ description Loopback
+ ipv4 address 10.6.6.6 255.255.255.255
+!
+interface MgmtEth0/0/CPU0/0
+ description OOB Management
+ ipv4 address 172.21.116.40 255.255.255.0
+!
+interface GigabitEthernet0/0/0/0
+ description Core connection to P1
+ ipv4 address 192.168.116.6 255.255.255.0
+!
+interface GigabitEthernet0/0/0/1
+ description Core connection to P2
+ ipv4 address 192.168.126.6 255.255.255.0
+!
+interface GigabitEthernet0/0/0/2
+ shutdown
+!
+router static
+ address-family ipv4 unicast
+  0.0.0.0/0 172.21.116.1
+ !
+!
+router isis 1
+ is-type level-1
+ net 49.0001.0000.0001.00
+ nsf ietf
+ address-family ipv4 unicast
+  metric-style wide
+ !
+ interface Loopback0
+  passive
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/0
+  address-family ipv4 unicast
+  !
+ !
+ interface GigabitEthernet0/0/0/1
+  address-family ipv4 unicast
+  !
+ !
+!
+router ospf PE6
+ router-id 10.6.6.6
+ nsf ietf
+ area 0
+  interface Loopback0
+   passive enable
+  !
+  interface GigabitEthernet0/0/0/0
+  !
+  interface GigabitEthernet0/0/0/1
+  !
+ !
+!
+router bgp 1
+ bgp router-id 10.6.6.6
+ address-family ipv4 unicast
+ !
+ neighbor-group internal
+  remote-as 1
+  update-source Loopback0
+  address-family ipv4 unicast
+  !
+ !
+ ! iBGP
+ ! iBGP peers
+ neighbor 10.1.1.1
+  use neighbor-group internal
+ !
+ neighbor 10.2.2.2
+  use neighbor-group internal
+ !
+ neighbor 10.3.3.3
+  use neighbor-group internal
+ !
+ neighbor 10.4.4.4
+  use neighbor-group internal
+  description PE4
+ !
+ neighbor 10.5.5.5
+  use neighbor-group internal
+ !
+ neighbor 10.11.11.11
+  use neighbor-group internal
+  description P1
+ !
+ neighbor 10.12.12.12
+  use neighbor-group internal
+  description P2
+ !
+!
+mpls oam
+!
+ssh server v2
+end</entry>
+        </extensions>
+        <interface id="0" name="GigabitEthernet0/0/0/0"/>
+        <interface id="1" name="GigabitEthernet0/0/0/1"/>
+        <interface id="2" name="GigabitEthernet0/0/0/2"/>
+    </node>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[3]" src="/virl:topology/virl:node[5]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[4]" src="/virl:topology/virl:node[6]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[5]" src="/virl:topology/virl:node[7]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[6]" src="/virl:topology/virl:node[8]/virl:interface[1]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[1]" src="/virl:topology/virl:node[3]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[2]" src="/virl:topology/virl:node[4]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[3]" src="/virl:topology/virl:node[5]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[4]" src="/virl:topology/virl:node[6]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[5]" src="/virl:topology/virl:node[7]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[6]" src="/virl:topology/virl:node[8]/virl:interface[2]"/>
+    <connection dst="/virl:topology/virl:node[1]/virl:interface[7]" src="/virl:topology/virl:node[2]/virl:interface[7]"/>
+    <connection dst="/virl:topology/virl:node[2]/virl:interface[8]" src="/virl:topology/virl:node[1]/virl:interface[8]"/>
+</topology>
